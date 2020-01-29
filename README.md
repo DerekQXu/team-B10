@@ -1,5 +1,5 @@
-# Sample Project Title
-Briefly describe your project here.
+# Wander.io
+Intelligently generates a travel itinerary with minimal user inputs.
 
 ## Directory Structure
 Explain how the code is organized
