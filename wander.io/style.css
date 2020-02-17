@@ -1,0 +1,26 @@
+.header {
+    position: fixed;
+    display: block;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background: #DCEEFE;;
+}
+
+.logo {
+    font-family: sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 28px;
+    line-height: 32px;
+    /* identical to box height */
+
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #000000;
+}
+
+.nav {
+}
