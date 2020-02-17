@@ -1,26 +1,50 @@
+@import url(https://fonts.googleapis.com/css?family=Comfortaa);
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
 .header {
     position: fixed;
-    display: block;
     width: 100%;
     top: 0;
     left: 0;
-    background: #DCEEFE;;
+    padding: 8px 16px;
+    overflow: hidden;
+    background: #DCEEFE;
 }
-
-.logo {
-    font-family: sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 28px;
-    line-height: 32px;
-    /* identical to box height */
-
-    display: flex;
-    align-items: center;
+  
+.header a {
+    float: left;
+    color: black;
+    font-family: 'Montserrat';
     text-align: center;
-
-    color: #000000;
+    padding: 8px;
+    text-decoration: none;
+    font-size: 14px; 
+    line-height: 24px;
+    border-radius: 12px;
 }
 
-.nav {
+.header a.logo {
+    font-size: 25px;
+    font-weight: bold;
+    font-family: 'Comfortaa';
+}
+
+.header a:hover {
+    background-color: #ddd;
+}
+
+.header a.reg {
+    background-color: dodgerblue;
+    color: white;
+    padding: 8px 18px;
+}
+.header a.log {
+    background-color: white;
+    color: black;
+    padding: 8px 24px;
+    margin-right: 12px;
+}
+
+.header-right {
+    float: right;
+    padding: 1px 48px;
 }
