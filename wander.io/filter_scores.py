@@ -91,17 +91,22 @@ def filter_xys_list(xys_list, max_itr, agg_type='sum', sensitivity=10, bias=100)
         xys_filtered_list.append((x,y,s))
     return xys_filtered_list
 
-xys_list = gen_syn_loc()
-xys_filtered_list = filter_xys_list(xys_list, 5000)
+def main():
+    xys_list = gen_syn_loc()
+    xys_filtered_list = filter_xys_list(xys_list, 5000)
 
-ax1 = plt.subplot(211)
-ax1.set_title('Input Scores')
-ax1.set_xlabel('X location')
-ax1.set_ylabel('Y location')
-plot(xys_list, ax1)
-ax2 = plt.subplot(212)
-ax2.set_title('Filtered Scores, Thresh=8.0')
-ax2.set_xlabel('X location')
-ax2.set_ylabel('Y location')
-plot(xys_filtered_list, ax2, thresh=8.0)
-plt.show()
+    ax1 = plt.subplot(211)
+    ax1.set_title('Input Scores')
+    ax1.set_xlabel('X location')
+    ax1.set_ylabel('Y location')
+    plot(xys_list, ax1)
+
+    ax2 = plt.subplot(212)
+    ax2.set_title('Filtered Scores, Thresh=8.0')
+    ax2.set_xlabel('X location')
+    ax2.set_ylabel('Y location')
+    plot(xys_filtered_list, ax2, thresh=8.0)
+    plt.show()
+
+if __name__ == '__main__':
+    main()
