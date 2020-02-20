@@ -22,20 +22,22 @@ def gen_syn_loc():
     random.shuffle(xys_list)
     return xys_list
 
-def plot(xys_list, ax, thresh=None):
+def plot(xys_list, ax, k=None):
     color = 'grey'
     color_sel = 'red'
-    if thresh is None:
+    if k is None:
         x_list = [xys[0] for xys in xys_list]
         y_list = [xys[1] for xys in xys_list]
         s_list = [xys[2] for xys in xys_list]
         plot_helper(x_list, y_list, s_list, ax, color)
     else:
+        s_list = [xys[2] for xys in xys_list]
+        s_list_topk = (np.array(s_list).argsort()[-k:][::-1]).tolist()
         x_list1, y_list1, s_list1 = [], [], []
         x_list2, y_list2, s_list2 = [], [], []
-        for xys in xys_list:
+        for i, xys in enumerate(xys_list):
             x,y,s = xys
-            if s > thresh:
+            if i in s_list_topk:
                 x_list2.append(x)
                 y_list2.append(y)
                 s_list2.append(s)
@@ -68,22 +70,68 @@ def get_dists(xys_list):
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
-def filter_xys_list(xys_list, max_itr, agg_type='sum', sensitivity=10, bias=100):
+def filter_xys_list(xys_list, max_itr, num_neighbors=99999, sensitivity=10, bias=100):
     s_list = [xys[2] for xys in xys_list]
     S = np.array(s_list)
 
     L = get_dists(xys_list)
     l_avg = np.mean(L)
 
-    if agg_type == 'sum':
-        AGG = np.sum
-    elif agg_type == 'max':
-        AGG = np.max
-    else:
-        assert False
     for _ in range(max_itr):
-        S_temp = AGG((l_avg-L)*np.exp(S), axis=0)+bias*np.exp(S)
-        S = 10*sigmoid(sensitivity*S_temp/np.max(S_temp))
+        S_neighbors = (l_avg-L)*np.exp(S)
+        #S_neighbors_filtered = S_neighbors.argsort(axis = 0)
+        S_neighbors_filtered = np.sort(S_neighbors, axis=0)[-num_neighbors:][::-1]
+        S_agg = np.sum(S_neighbors_filtered, axis=0)
+        S_tilde = S_agg + bias*np.exp(S)
+        S = 10*sigmoid(sensitivity*S_tilde/np.max(S_tilde))
+    
+    xys_filtered_list = []
+    for i, s in enumerate(S):
+        x,y,_ = xys_list[i]
+        xys_filtered_list.append((x,y,s))
+    return xys_filtered_list
+
+def plot_helper(x_list, y_list, s_list, ax, color):
+    ax.scatter(x_list, y_list, c=color)
+    for i, s in enumerate(s_list):
+        ax.annotate('{0:.2f}'.format(s), (x_list[i], y_list[i]))
+
+def get_dists(xys_list):
+    N = len(xys_list)
+    L = np.zeros(shape=(N,N)) 
+    xy_list = [(xys[0],xys[1]) for xys in xys_list]
+    for i in range(N):
+        for j in range(i, N):
+            coord1 = np.array(xy_list[i])
+            coord2 = np.array(xy_list[j])
+            l = np.linalg.norm(coord1-coord2) 
+            L[i][j] = l
+            L[j][i] = l
+    return L 
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+def filter_xys_list(xys_list, max_itr, num_neighbors=99999, sensitivity=10, bias=100):
+    s_list = [xys[2] for xys in xys_list]
+    S = np.array(s_list)
+
+    L = get_dists(xys_list)
+    l_avg = np.mean(L)
+
+    for _ in range(max_itr):
+        S_neighbors = (l_avg-L)*np.exp(S)
+        S_neighbors_filtered = np.sort(S_neighbors, axis=0)[-num_neighbors:]
+        '''
+        print('----------------')
+        print(S_neighbors[:,0])
+        print(np.sort(S_neighbors[:,0], axis=0))
+        print(S_neighbors_filtered[:,0])
+        print('----------------')
+        '''
+        S_agg = np.sum(S_neighbors_filtered, axis=0)
+        S_tilde = S_agg + bias*np.exp(S)
+        S = 10*sigmoid(sensitivity*S_tilde/np.max(S_tilde))
     
     xys_filtered_list = []
     for i, s in enumerate(S):
@@ -93,7 +141,7 @@ def filter_xys_list(xys_list, max_itr, agg_type='sum', sensitivity=10, bias=100)
 
 def main():
     xys_list = gen_syn_loc()
-    xys_filtered_list = filter_xys_list(xys_list, 5000)
+    xys_filtered_list = filter_xys_list(xys_list, max_itr=3, num_neighbors=2, sensitivity=5, bias=3)
 
     ax1 = plt.subplot(211)
     ax1.set_title('Input Scores')
@@ -102,10 +150,10 @@ def main():
     plot(xys_list, ax1)
 
     ax2 = plt.subplot(212)
-    ax2.set_title('Filtered Scores, Thresh=8.0')
+    ax2.set_title('Filtered Scores, topk=8.0')
     ax2.set_xlabel('X location')
     ax2.set_ylabel('Y location')
-    plot(xys_filtered_list, ax2, thresh=8.0)
+    plot(xys_filtered_list, ax2, k=5)
     plt.show()
 
 if __name__ == '__main__':
