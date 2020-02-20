@@ -1,0 +1,40 @@
+{% extends "maps/base.html" %}
+{% block header %}
+{% load leaflet_tags %}
+{% leaflet_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+<style>
+    .map {
+        position: absolute;
+        width: 80%;
+        height: 60%;
+    }
+</style>
+{% leaflet_js %}
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+{% endblock header %}
+{% block content %}
+<div id="map" class="map"></div>
+<script type="text/javascript">
+    var map = L.map('map');
+
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    var waypoints = [];
+    L.Routing.control({
+        waypoints: waypoints,
+        plan: L.Routing.plan(
+        [
+            L.latLng(57.74, 11.94),
+            L.latLng(57.6792, 11.949),
+            L.latLng(57.6, 11.9),
+        ],
+        {
+            addWaypoints: false,
+            draggableWaypoints: false,
+        })
+    }).addTo(map);
+</script>
+{% endblock content %}
