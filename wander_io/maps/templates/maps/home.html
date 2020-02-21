@@ -18,7 +18,7 @@
 <body>
   <div class="container h-100">
     <div class="row justify-content-center align-items-center h-100">
-      <form class="col-4 main-form">
+      <form class="col-4 main-form" method="get" action="survey">
         <div class="form-group">
           <div class="text-center">
             <h1>Wander</h1>
@@ -28,7 +28,7 @@
         <div class="form-group">
           <div class="col">
             <label for="destination">I want to travel to</label>
-            <input type="place" class="form-control" id="destination" placeholder="Destination">
+            <input type="text" class="form-control" name="destination" id="destination" placeholder="Destination">
           </div>
         </div>
 
@@ -42,7 +42,7 @@
         </div>
 
         <div class="form-group col text-center"> <!-- Submit button -->
-          <button class="btn btn-primary btn-block" name="submit" type="submit">Submit</button>
+          <button class="btn btn-primary btn-block" type="submit">Submit</button>
         </div>
 
       </form>
