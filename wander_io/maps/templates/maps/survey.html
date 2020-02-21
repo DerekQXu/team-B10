@@ -1,0 +1,104 @@
+{% load static %}
+{% block header %}
+<link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://unpkg.com/jquery"></script>
+<script src="https://surveyjs.azureedge.net/1.5.10/survey.jquery.js"></script>
+<link href="https://surveyjs.azureedge.net/1.5.10/modern.css" type="text/css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="{% static 'maps/survey.css' %}">
+
+
+{% endblock header %}
+{% block content %}
+
+<body>
+  <div class="container h-100">
+    <div class="row justify-content-center align-items-center h-100">
+        <div id="surveyElement" style="display:inline-block;width:100%;"></div>
+        <div id="surveyResult"></div>
+    </div>
+  </div>
+  <script>
+    Survey
+    .StylesManager
+    .applyTheme("modern");
+
+var json = {
+    title: "Personalization Survey",
+    showProgressBar: "bottom",
+    firstPageIsStarted: true,
+    startSurveyText: "Start Survey",
+    pages: [
+        {
+            questions: [
+                {
+                    type: "html",
+                    html: "You are about to answer some questions for us to better understand your preferences.<br/>Please click on <b>'Start Survey'</b> button when you are ready."
+                }
+            ]
+        }, {
+            questions: [
+                {
+                    type: "radiogroup",
+                    name: "startday",
+                    title: "When would you like to start your day during the trip?",
+                    choices: [
+                        "7:00 am", "8:00 am", "9:00 am", "10:00 am", "11:00 am"
+                    ],
+                }
+            ]
+        }, {
+            questions: [
+                {
+                    type: "radiogroup",
+                    name: "endday",
+                    title: "When would you like to end your day during the trip?",
+                    choices: [
+                        "5:00 pm", "6:00 pm", "7:00 pm", "8:00 pm", "9:00 pm"
+                    ],
+                }
+            ]
+        }, {
+            questions: [
+                {
+                    type: "radiogroup",
+                    name: "numberofattractions",
+                    title: "How many attractions would you like to visit everyday?",
+                    choices: [
+                        "1", "2", "3", "4"
+                    ],
+                }
+            ]
+        }
+    ],
+};
+
+window.survey = new Survey.Model(json);
+
+survey
+    .onComplete
+    .add(function (result) {
+        document
+            .querySelector('#surveyResult')
+            .textContent = "Result JSON:\n" + JSON.stringify(result.data, null, 3);
+    });
+
+$("#surveyElement").Survey({model: survey});
+
+  </script>
+
+  <!-- <script type="text/javascript" src="{% static 'map/js/survey.js'%}"></script> -->
+  <!-- <div class="center-block">
+    <h1>Wander</h1>
+  </div> -->
+</body>
+
+{% endblock content %}
