@@ -61,6 +61,22 @@
       };
       date_input.datepicker(options);
     })
+
+    function initialize() {
+    var input = document.getElementById('destination');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+    autocomplete.setFields(['address_components', 'geometry', 'icon', 'name']);
+    autocomplete.setTypes(['(cities)']);
+    google.maps.event.addListener(autocomplete, 'place_changed', function () {
+        var place = autocomplete.getPlace();
+        document.getElementById('city2').value = place.name;
+        document.getElementById('cityLat').value = place.geometry.location.lat();
+        document.getElementById('cityLng').value = place.geometry.location.lng();
+    });
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCn_fbVwGYtPjSfCTZDv97SrLpMOrGmMt8&libraries=places&callback=initialize"
+        async defer>
 </script>
   <!-- <div class="center-block">
     <h1>Wander</h1>
