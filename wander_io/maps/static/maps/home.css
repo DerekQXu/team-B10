@@ -1,0 +1,38 @@
+body{
+   background: url("media/central-park.gif") no-repeat center center fixed;
+   -webkit-background-size: cover;
+   -moz-background-size: cover;
+   -o-background-size: cover;
+   background-size: cover;
+}
+
+h1 {
+  font-family: 'Pacifico', sans-serif;
+  color: #2980b9;
+  font-size: 60px;
+  margin: auto;
+  display: block;
+}
+
+label {
+  width: 100%;
+  text-align: center;
+}
+
+#startDate, #endDate, #destination {
+  text-align: center;
+}
+
+.btn-primary {
+  background-color: #2980b9;
+  border-color: #2980b9;
+}
+
+.btn-primary:hover {
+  background-color: #3498db;
+  border-color: #3498db;
+}
+
+form {
+  margin-bottom: 15px;
+}
