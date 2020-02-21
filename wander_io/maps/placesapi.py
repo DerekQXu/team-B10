@@ -2,7 +2,7 @@ import requests
 import json
 import time
 
-def search_places_by_coordinate(location, radius, types, api):
+def search_places(location, radius, types, api):
     endpoint_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
     places = []
     params = {
