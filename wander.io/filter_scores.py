@@ -30,6 +30,7 @@ def filter_xys_list(xys_list, max_itr, num_neighbors, sensitivity, bias):
     # get scores
     s_list = [xys[2] for xys in xys_list]
     S = np.array(s_list)
+    S_original = np.array(s_list)
 
     # get distance matrix
     L = get_dists(xys_list)
@@ -38,13 +39,15 @@ def filter_xys_list(xys_list, max_itr, num_neighbors, sensitivity, bias):
     for _ in range(max_itr):
         # iteratively refine scores
         # collect neighbor scores
-        S_neighbors = (l_avg-L)*np.exp(S)
+        S_avg = np.mean(S)
+        S_neighbors = (l_avg-L)*S# - L*(S-S_avg)
         # aggregate to top num_neighbor neighbors with the highest scores
         S_neighbors_filtered = np.sort(S_neighbors, axis=0)[-num_neighbors:]
         S_agg = np.sum(S_neighbors_filtered, axis=0)
         # bias for the original score 
-        S_tilde = S_agg + bias*np.exp(S)
+        S_tilde = S_agg + bias*S_original*S_original
         # normalize scores 
+        S_tilde = (S_tilde-np.mean(S_tilde))
         S = 10*sigmoid(sensitivity*S_tilde/np.max(S_tilde))
     
     # reconstruct xys_list (do not do in-place modification) 
@@ -134,14 +137,16 @@ def plot_helper(x_list, y_list, s_list, ax, color):
 #####################################################################
 def main():
     # dataset configurations
-    synthetic_params = [(50, (0,-10), (5,6)), (50, (12,8), (7,7))]
+    synthetic_params = [(35, (0,-10), (5,6)), (33, (12,8), (7,7))]
     # clustering configurations
-    num_days = 2
+    num_days=2
     # filtering configurations
-    max_itr=3
+    max_itr=5000
     num_neighbors=2
-    sensitivity=5
-    bias=50
+    sensitivity=8
+    bias=1
+    # topk?
+    k = 8 
 
     # generate synthetic datasets
     random.seed(123)
@@ -165,14 +170,13 @@ def main():
         # curate the score list of each cluster
         xys_filtered_list = filter_xys_list(xys_list, max_itr=max_itr, num_neighbors=num_neighbors, sensitivity=sensitivity, bias=bias)
 
-        k = 5
         # Show the pre- and post-filtering scores and selections
-        ax1 = plt.subplot(211)
+        ax1 = plt.subplot(121)
         ax1.set_title('Input Scores (topk={}) for Cluster {}'.format(k, i))
         ax1.set_xlabel('X location')
         ax1.set_ylabel('Y location')
         plot(xys_list, ax1, k=k)
-        ax2 = plt.subplot(212)
+        ax2 = plt.subplot(122)
         ax2.set_title('Filtered Scores (topk={}) for Cluster {}'.format(k, i))
         ax2.set_xlabel('X location')
         ax2.set_ylabel('Y location')
