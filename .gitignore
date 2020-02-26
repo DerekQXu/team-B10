@@ -240,3 +240,6 @@ dmypy.json
 
 # vscode stuff
 .vscode
+
+# secret keys
+.env
