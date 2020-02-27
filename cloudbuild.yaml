@@ -49,7 +49,7 @@ steps:
       - "gcr.io/cloudsql-docker/gce-proxy"
       - "/cloud_sql_proxy"
       - "-dir=/cloudsql"
-      - "-instances=castijuegos-194818:us-central1:castijuegos-db"
+      - "-instances=cs130-268823:us-central1:wander-io-db"
     id: setup_db
     waitFor:
       - test
