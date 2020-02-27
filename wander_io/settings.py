@@ -28,10 +28,12 @@ DEBUG = config('DEBUG') != 'FALSE'
 
 ALLOWED_HOSTS = ['localhost','wander-io.com']
 
-
 # Application definition
 
 INSTALLED_APPS = [
+    'crispy_forms',
+    'storages',
+
     'maps.apps.MapsConfig',
     'users.apps.UsersConfig',
 
@@ -41,9 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'crispy_forms',
-    'storages',
 ]
 
 MIDDLEWARE = [
@@ -141,18 +140,20 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Gcloud Bucket storage
 if os.getenv('GS_BUCKET_NAME'):
+    INSTALLED_APPS.insert(0, 'collectstatic')
     DEFAULT_FILE_STORAGE = 'wander_io.storages.GoogleCloudMediaStorage'
     STATICFILES_STORAGE = 'wander_io.storages.GoogleCloudStaticStorage'
     GS_DEFAULT_ACL = 'publicRead'
     GS_BUCKET_NAME = os.getenv('GS_BUCKET_NAME')
     STATIC_URL = 'https://storage.googleapis.com/' + GS_BUCKET_NAME + '/static/'
     MEDIA_URL = 'https://storage.googleapis.com/' + GS_BUCKET_NAME + '/media/'
+    STATICFILES_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
+    COLLECTFAST_STRATEGY = "collectfast.strategies.gcloud.GoogleCloudStrategy"
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
