@@ -14,7 +14,7 @@ steps:
       - "--env"
       - "GOOGLE_RECAPTCHA_SECRET_KEY=${_GOOGLE_RECAPTCHA_SECRET_KEY}"
       - "--network=cloudbuild"
-      - "gcr.io/$PROJECT_ID/${_ENV_NAME}:$COMMIT_SHA"
+      - "gcr.io/$PROJECT_ID/${_ENV_NAME}:latest"
       - "python"
       - "manage.py"
       - "test"
@@ -31,7 +31,7 @@ steps:
       - "--env"
       - "GOOGLE_RECAPTCHA_SECRET_KEY=${_GOOGLE_RECAPTCHA_SECRET_KEY}"
       - "--network=cloudbuild"
-      - "gcr.io/$PROJECT_ID/${_ENV_NAME}:$COMMIT_SHA"
+      - "gcr.io/$PROJECT_ID/${_ENV_NAME}:latest"
       - "python"
       - "manage.py"
       - "collectstatic"
@@ -73,7 +73,7 @@ steps:
       - "--network=cloudbuild"
       - "-v"
       - "/cloudsql:/cloudsql"
-      - "gcr.io/$PROJECT_ID/${_ENV_NAME}:$COMMIT_SHA"
+      - "gcr.io/$PROJECT_ID/${_ENV_NAME}:latest"
       - "python"
       - "manage.py"
       - "migrate"
@@ -81,7 +81,7 @@ steps:
     waitFor:
       - setup_db
   - name: "gcr.io/cloud-builders/docker"
-    args: ["push", "gcr.io/$PROJECT_ID/${_ENV_NAME}:$COMMIT_SHA"]
+    args: ["push", "gcr.io/$PROJECT_ID/${_ENV_NAME}:latest"]
     id: push_image
   - name: "gcr.io/cloud-builders/gcloud"
     args:
@@ -89,7 +89,7 @@ steps:
       - "deploy"
       - "${_ENV_NAME}"
       - "--image"
-      - "gcr.io/$PROJECT_ID/${_ENV_NAME}:$COMMIT_SHA"
+      - "gcr.io/$PROJECT_ID/${_ENV_NAME}:latest"
       - "--region"
       - "us-central1"
       - "--platform"
@@ -99,4 +99,4 @@ steps:
       - "SECRET_KEY=${_SECRET_KEY},GOOGLE_RECAPTCHA_SECRET_KEY=${_GOOGLE_RECAPTCHA_SECRET_KEY},DB_HOST=${_DB_HOST},DB_NAME=${_DB_NAME},DB_USER=${_DB_USER},DB_PASSWORD=${_DB_PASSWORD},DEBUG=${_DEBUG},GS_BUCKET_NAME=${_GS_BUCKET_NAME}"
     id: deploy
 images:
-  - "gcr.io/$PROJECT_ID/${_ENV_NAME}:$COMMIT_SHA"
+  - "gcr.io/$PROJECT_ID/${_ENV_NAME}:latest"
