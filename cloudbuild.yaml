@@ -96,7 +96,7 @@ steps:
       - "managed"
       - "--allow-unauthenticated"
       - "--set-env-vars"
-      - "DB_HOST=${_DB_HOST},DB_NAME=${_DB_NAME},DB_USER=${_DB_USER},DB_PASSWORD=${_DB_PASSWORD},DEBUG=${_DEBUG},GS_BUCKET_NAME=${_GS_BUCKET_NAME}"
+      - "SECRET_KEY=${_SECRET_KEY},GOOGLE_RECAPTCHA_SECRET_KEY=${_GOOGLE_RECAPTCHA_SECRET_KEY},DB_HOST=${_DB_HOST},DB_NAME=${_DB_NAME},DB_USER=${_DB_USER},DB_PASSWORD=${_DB_PASSWORD},DEBUG=${_DEBUG},GS_BUCKET_NAME=${_GS_BUCKET_NAME}"
     id: deploy
 images:
   - "gcr.io/$PROJECT_ID/${_ENV_NAME}:$COMMIT_SHA"
