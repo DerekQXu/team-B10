@@ -1,6 +1,6 @@
 FROM python:3.8-slim
 
-RUN apt-get update && apt install -y libjpeg-dev libpq-dev zlib1g-dev gcc
+RUN apt-get update && apt-get upgrade && apt install -y libjpeg-dev libpq-dev zlib1g-dev gcc
 
 COPY requirements.txt ./
 RUN pip install --quiet -r requirements.txt

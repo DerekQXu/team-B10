@@ -145,7 +145,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Gcloud Bucket storage
 if os.getenv('GS_BUCKET_NAME'):
-    INSTALLED_APPS.insert(0, 'collectstatic')
+    INSTALLED_APPS.insert(0, 'collectfast')
     DEFAULT_FILE_STORAGE = 'wander_io.storages.GoogleCloudMediaStorage'
     STATICFILES_STORAGE = 'wander_io.storages.GoogleCloudStaticStorage'
     GS_DEFAULT_ACL = 'publicRead'
