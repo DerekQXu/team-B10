@@ -1,4 +1,4 @@
-FROM python:3.6-slim
+FROM python:3.8-slim
 
 RUN apt-get update && apt install -y libjpeg-dev libpq-dev zlib1g-dev gcc
 
@@ -8,4 +8,4 @@ COPY . ./
 
 RUN pip install -r requirements.txt
 
-CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 castijuegos.wsgi
+CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 wander_io.wsgi
