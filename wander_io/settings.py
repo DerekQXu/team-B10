@@ -26,7 +26,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG') != 'false'
 
-ALLOWED_HOSTS = ['localhost','prod-mtlmbdcrfa-uc.a.run.app']
+ALLOWED_HOSTS = ['localhost','wander-io.com']
 
 
 # Application definition
